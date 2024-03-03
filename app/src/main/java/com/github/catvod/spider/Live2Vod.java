@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.github.catvod.crawler.Spider;
 import com.github.catvod.utils.okhttp.OkHttpUtil;
+import io.github.pixee.security.BoundedLineReader;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -162,7 +163,7 @@ public class Live2Vod extends Spider {
     private void setM3ULive(BufferedReader bufferedReader, JSONArray videos, String diyPic) {
         try {
             String line;
-            while ((line = bufferedReader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
                 if (line.equals("")) continue;
                 if (line.contains("#EXTM3U")) continue;
                 if (line.contains("#EXTINF")) {
@@ -176,7 +177,7 @@ public class Live2Vod extends Spider {
                         name = line.substring(line.lastIndexOf(",") + 1);
                     }
                     // 再读取一行，就是对应的 url 链接了
-                    String url = bufferedReader.readLine().trim();
+                    String url = BoundedLineReader.readLine(bufferedReader, 5_000_000).trim();
                     String vod_play_url = name + "$" + url;
                     JSONObject videoInfoObj = new JSONObject()
                             .put("vod_play_url", vod_play_url)
@@ -199,7 +200,7 @@ public class Live2Vod extends Spider {
         try {
             List<Live> liveList = new ArrayList<>();
             String line;
-            while ((line = bufferedReader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
                 if (line.equals("")) continue;
                 if (line.contains("#EXTM3U")) continue;
                 if (line.contains("#EXTINF")) {
@@ -209,7 +210,7 @@ public class Live2Vod extends Spider {
                         name = line.substring(line.lastIndexOf(",") + 1);
                     }
                     // 再读取一行，就是对应的 url 链接了
-                    String url = bufferedReader.readLine().trim();
+                    String url = BoundedLineReader.readLine(bufferedReader, 5_000_000).trim();
                     liveList.add(new Live(name, url, groupTitle));
                 }
             }
@@ -257,7 +258,7 @@ public class Live2Vod extends Spider {
             String group = "";
             int count = 0; // 计数
             String line;
-            while ((line = bufferedReader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
                 if (line.equals("")) continue; // 空行不管，进入下一次循环
                 if (line.contains(",#genre#")) {
                     // 是直播分类
@@ -300,7 +301,7 @@ public class Live2Vod extends Spider {
             ArrayList<Live> liveArrayList = new ArrayList<>();
             String group = "";
             String line;
-            while ((line = bufferedReader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
                 if (line.equals("")) continue; // 空行不管，进入下一次循环
                 if (!line.contains(",")) continue;
                 if (line.contains(",#genre#")) {
