@@ -57,7 +57,7 @@ public class MixWeb {
                     String key = keys.next();
                     HashMap<String, String> parseBean = jx.get(key);
                     String type = parseBean.get("type");
-                    if (type.equals("0")) {
+                    if ("0".equals(type)) {
                         try {
                             //取出单个解析的flags列表
                             JSONArray flags = new JSONObject(parseBean.get("ext")).getJSONArray("flag");
@@ -89,7 +89,7 @@ public class MixWeb {
                     String key = flagJx.get(i);
                     HashMap<String, String> parseBean = jx.get(key);
                     String type = parseBean.get("type");
-                    if (type.equals("0")) {
+                    if ("0".equals(type)) {
                         //将json解析放入webJx
                         webJx.add(parseBean.get("url"));
                     }
@@ -100,7 +100,7 @@ public class MixWeb {
                     String key = keys.next();
                     HashMap<String, String> parseBean = jx.get(key);
                     String type = parseBean.get("type");
-                    if (type.equals("0")) {
+                    if ("0".equals(type)) {
                         webJx.add(parseBean.get("url"));
                     }
                 }

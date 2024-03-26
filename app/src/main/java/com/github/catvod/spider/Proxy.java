@@ -22,7 +22,7 @@ public class Proxy extends Spider {
         int port = 9978;
         while (port < 10000) {
             String resp = OkHttpUtil.string("http://127.0.0.1:" + port + "/proxy?do=ck", null);
-            if (resp.equals("ok")) {
+            if ("ok".equals(resp)) {
                 SpiderDebug.log("Found local server port " + port);
                 localPort = port;
                 break;
@@ -39,25 +39,25 @@ public class Proxy extends Spider {
     public static Object[] proxy(Map<String, String> params) {
         try {
             String what = params.get("do");
-            if (what.equals("live")) {
+            if ("live".equals(what)) {
                 String type = params.get("type");
-                if (type.equals("txt")) {
+                if ("txt".equals(type)) {
                     String ext = params.get("ext");
                     if (!ext.startsWith("http")) {
                         ext = new String(Base64.decode(ext, Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP), "UTF-8");
                     }
                     return TxtSubscribe.load(ext);
                 }
-            } else if (what.equals("ck")) {
+            } else if ("ck".equals(what)) {
                 Object[] result = new Object[3];
                 result[0] = 200;
                 result[1] = "text/plain; charset=utf-8";
                 ByteArrayInputStream baos = new ByteArrayInputStream("ok".getBytes("UTF-8"));
                 result[2] = baos;
                 return result;
-            } else if (what.equals("MixDemo")) {
+            } else if ("MixDemo".equals(what)) {
                 return MixDemo.loadHtml(params.get("flag"), params.get("url"));
-            } else if (what.equals("MixWeb")) {
+            } else if ("MixWeb".equals(what)) {
                 return MixWeb.loadHtml(params.get("flag"), params.get("url"));
             }
         } catch (Throwable th) {

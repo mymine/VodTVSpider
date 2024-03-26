@@ -58,7 +58,7 @@ public class MixDemo {
                     String key = keys.next();
                     HashMap<String, String> parseBean = jx.get(key);
                     String type = parseBean.get("type");
-                    if (type.equals("1") || type.equals("0")) {
+                    if ("1".equals(type) || "0".equals(type)) {
                         try {
                             JSONArray flags = new JSONObject(parseBean.get("ext")).getJSONArray("flag");
                             for (int j = 0; j < flags.length(); j++) {
@@ -85,9 +85,9 @@ public class MixDemo {
                     String key = flagJx.get(i);
                     HashMap<String, String> parseBean = jx.get(key);
                     String type = parseBean.get("type");
-                    if (type.equals("1")) {
+                    if ("1".equals(type)) {
                         jsonJx.put(key, mixUrl(parseBean.get("url"), parseBean.get("ext")));
-                    } else if (type.equals("0")) {
+                    } else if ("0".equals(type)) {
                         webJx.add(parseBean.get("url"));
                     }
                 }
@@ -97,9 +97,9 @@ public class MixDemo {
                     String key = keys.next();
                     HashMap<String, String> parseBean = jx.get(key);
                     String type = parseBean.get("type");
-                    if (type.equals("1")) {
+                    if ("1".equals(type)) {
                         jsonJx.put(key, mixUrl(parseBean.get("url"), parseBean.get("ext")));
-                    } else if (type.equals("0")) {
+                    } else if ("0".equals(type)) {
                         webJx.add(parseBean.get("url"));
                     }
                 }

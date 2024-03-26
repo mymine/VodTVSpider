@@ -101,7 +101,7 @@ public class Live2Vod extends Spider {
 
     @Override
     public String categoryContent(String tid, String pg, boolean filter, HashMap<String, String> extend) throws Exception {
-        if (!pg.equals("1")) return "";
+        if (!"1".equals(pg)) return "";
         JSONObject typeIdObj = new JSONObject(tid);
         String URL = typeIdObj.optString("url");
         String diyPic = typeIdObj.optString("pic");
@@ -113,7 +113,7 @@ public class Live2Vod extends Spider {
         JSONArray videos = new JSONArray();
         if (content.contains("#genre#")) {
             // 是 txt 格式的直播，调用 txt 直播处理方法
-            if (circuit.equals("1")) {
+            if ("1".equals(circuit)) {
                 // 需要按照线路划分
                 setTxtLiveCircuit(bufferedReader, videos, diyPic);
             } else {
@@ -122,7 +122,7 @@ public class Live2Vod extends Spider {
         }
         if (content.contains("#EXTM3U")) {
             // 是 m3u 格式的直播，调用 m3u 直播处理方法
-            if (group.equals("1")) {
+            if ("1".equals(group)) {
                 setM3ULiveGroup(bufferedReader, videos, diyPic); // 要分组
             } else {
                 setM3ULive(bufferedReader, videos, diyPic);
@@ -163,16 +163,16 @@ public class Live2Vod extends Spider {
         try {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                if (line.equals("")) continue;
+                if ("".equals(line)) continue;
                 if (line.contains("#EXTM3U")) continue;
                 if (line.contains("#EXTINF")) {
                     String name = subStr("tvg-name=\"", "\" tvg-logo=", line).trim();
                     String pic = subStr("tvg-logo=\"", "\" group-title=", line);
-                    if (!diyPic.equals("")) {
+                    if (!"".equals(diyPic)) {
                         pic = diyPic; // 如果有自定义图片，那么以自定义图片为主。
                     }
                     String remark = subStr("group-title=\"", "\",", line);
-                    if (name.equals("")) {
+                    if ("".equals(name)) {
                         name = line.substring(line.lastIndexOf(",") + 1);
                     }
                     // 再读取一行，就是对应的 url 链接了
@@ -200,12 +200,12 @@ public class Live2Vod extends Spider {
             List<Live> liveList = new ArrayList<>();
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                if (line.equals("")) continue;
+                if ("".equals(line)) continue;
                 if (line.contains("#EXTM3U")) continue;
                 if (line.contains("#EXTINF")) {
                     String name = subStr("tvg-name=\"", "\" tvg-logo=", line);
                     String groupTitle = subStr("group-title=\"", "\",", line);
-                    if (name.equals("")) {
+                    if ("".equals(name)) {
                         name = line.substring(line.lastIndexOf(",") + 1);
                     }
                     // 再读取一行，就是对应的 url 链接了
@@ -258,7 +258,7 @@ public class Live2Vod extends Spider {
             int count = 0; // 计数
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                if (line.equals("")) continue; // 空行不管，进入下一次循环
+                if ("".equals(line)) continue; // 空行不管，进入下一次循环
                 if (line.contains(",#genre#")) {
                     // 是直播分类
                     count++;
@@ -301,7 +301,7 @@ public class Live2Vod extends Spider {
             String group = "";
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                if (line.equals("")) continue; // 空行不管，进入下一次循环
+                if ("".equals(line)) continue; // 空行不管，进入下一次循环
                 if (!line.contains(",")) continue;
                 if (line.contains(",#genre#")) {
                     // 是直播分类
@@ -387,7 +387,7 @@ public class Live2Vod extends Spider {
         String pic = videoInfoObj.getString("pic");
         String vod_play_from = "选台";  // 线路 / 播放源标题
         String vodPlayFrom = videoInfoObj.optString("vod_play_from");
-        if (!vodPlayFrom.equals("")) vod_play_from = vodPlayFrom;
+        if (!"".equals(vodPlayFrom)) vod_play_from = vodPlayFrom;
 
         String description = "";
         String[] split = vod_play_url.split("\\$");

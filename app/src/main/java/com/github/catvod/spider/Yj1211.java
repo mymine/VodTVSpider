@@ -177,7 +177,7 @@ public class Yj1211 extends Spider {
         for (int i = 0; i < srcoria.length(); i++) {
             JSONObject srchome = new JSONObject();
             String platForm = srcoria.getJSONObject(i).getString("platForm");
-            if (pp == 1 && !catt.equals("all")) {
+            if (pp == 1 && !"all".equals(catt)) {
                 if (!platForm.equals(catt)) {
                     continue;
                 }
@@ -216,7 +216,7 @@ public class Yj1211 extends Spider {
         String actor = "观看人数:" + data.getString("online");
         String area = data.getString("platForm");
         String isLive = data.optString("isLive");
-        String type = isLive.equals("") ? "录播" : "正在直播中";
+        String type = "".equals(isLive) ? "录播" : "正在直播中";
         JSONObject vodInfo = new JSONObject()
                 .put("vod_id", ids.get(0))
                 .put("vod_pic", pic)

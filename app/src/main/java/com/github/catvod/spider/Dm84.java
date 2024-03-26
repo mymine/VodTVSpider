@@ -76,7 +76,7 @@ public class Dm84 extends Spider {
 
         // https://dm84.tv/show-1--time-战斗--2022-.html
         String cateUrl;
-        if (pg.equals("1")) {
+        if ("1".equals(pg)) {
             cateUrl = siteUrl + String.format("/show-%s--%s-%s--%s-.html", tid, by, classType, year);
         } else {
             cateUrl = siteUrl + String.format("/show-%s--%s-%s--%s-%s.html", tid, by, classType, year, pg);
@@ -186,7 +186,7 @@ public class Dm84 extends Spider {
     public String searchContent(String key, boolean quick, String pg) throws Exception {
         String keyWord = URLEncoder.encode(key);
         String searchUrl = siteUrl + "/s----------.html?wd=" + keyWord;
-        if (!pg.equals("1")) searchUrl = siteUrl + "/s-" + keyWord + "---------" + pg + ".html";
+        if (!"1".equals(pg)) searchUrl = siteUrl + "/s-" + keyWord + "---------" + pg + ".html";
         JSONArray videos = parseVodList(searchUrl);
         JSONObject result = new JSONObject();
         result.put("list", videos);

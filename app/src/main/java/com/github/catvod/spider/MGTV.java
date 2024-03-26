@@ -59,7 +59,7 @@ public class MGTV extends Spider {
                 String optString = optJSONObject.optString("title");
                 String q = q(str3, optJSONObject.optString("img"));
                 String optString2 = optJSONObject.optString("updateInfo");
-                if (optString2.equals("")) {
+                if ("".equals(optString2)) {
                     optString2 = optJSONObject.optString("subtitle");
                 }
                 String vodId = optJSONObject.optString("playPartId");

@@ -171,7 +171,7 @@ public class SP360 extends Spider {
         // referer = https://www.360kan.com/dianying/list?rank=rankhot&cat=喜剧&year=&area=香港&act=周星驰&pageno=2
         String cateUrl = "https://api.web.360kan.com/v1/filter/list?catid=" + tid + "&" + sb + "&size=35&callback=";
         String referer = "https://www.360kan.com/" + categoryClassId + "/list?" + sb;
-        if (!pg.equals("1")) {
+        if (!"1".equals(pg)) {
             // 第二页开始
             cateUrl = "https://api.web.360kan.com/v1/filter/list?catid=" + tid + "&" + sb + "&size=35&pageno=" + pg + "&callback=";
             referer = "https://www.360kan.com/" + categoryClassId + "/list?" + sb + "&pageno=" + pg;
@@ -195,13 +195,13 @@ public class SP360 extends Spider {
             //String pic = "https:" + getPic(item.optString("cdncover"));
             //String remark = item.optString("pubdate");
             String remark = "";
-            if (tid.equals("2") || tid.equals("4")) {
+            if ("2".equals(tid) || "4".equals(tid)) {
                 // 电视剧或动漫
                 String upInfo = item.optString("upinfo");
                 String total = item.optString("total");
                 remark = upInfo.equals(total) ? "已完结" : "更新至" + upInfo + "集";
             }
-            if (tid.equals("3")) {
+            if ("3".equals(tid)) {
                 // 综艺
                 remark = "更新至" + item.optString("tag");
             }

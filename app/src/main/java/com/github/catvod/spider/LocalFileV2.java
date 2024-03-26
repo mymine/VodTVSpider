@@ -35,7 +35,7 @@ public class LocalFileV2 extends Spider {
     @Override
     public void init(Context context, String extend) throws Exception {
         super.init(context, extend);
-        if (extend != null && extend.equals("showAllFile=false")) showAllFile = false;
+        if (extend != null && "showAllFile=false".equals(extend)) showAllFile = false;
     }
 
     @Override
@@ -159,7 +159,7 @@ public class LocalFileV2 extends Spider {
                     if (file.isDirectory()) continue;
                     String fileName2 = file.getName();
                     String suffix = getFileExt(fileName2);
-                    if (suffix.equals("")) continue;
+                    if ("".equals(suffix)) continue;
                     if (!media.contains(suffix)) continue;
                     vod_play_url.append(fileName2).append("$").append(file.getAbsolutePath()).append("#");
                 }

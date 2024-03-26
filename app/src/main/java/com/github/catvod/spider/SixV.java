@@ -79,7 +79,7 @@ public class SixV extends Spider {
     @Override
     public String categoryContent(String tid, String pg, boolean filter, HashMap<String, String> extend) throws Exception {
         String cateURL = siteURL + "/" + tid;
-        if (!pg.equals("1")) {
+        if (!"1".equals(pg)) {
             cateURL += "/index_" + pg + ".html";
         }
         String html = OkHttpUtil.string(cateURL, getHeader());
@@ -139,7 +139,7 @@ public class SixV extends Spider {
         String area = getStrByRegex(Pattern.compile("◎产　　地　(.*?)<br>"), partHTML);
         String remark = getStrByRegex(Pattern.compile("◎上映日期　(.*?)<br>"), partHTML);
         String actor = getActorOrDirector(Pattern.compile("◎演　　员　(.*?)</p>"), partHTML);
-        if (actor.equals("")) {
+        if ("".equals(actor)) {
             actor = getActorOrDirector(Pattern.compile("◎主　　演　(.*?)</p>"), partHTML);
         }
         String director = getActorOrDirector(Pattern.compile("◎导　　演　(.*?)<br>"), partHTML);
