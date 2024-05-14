@@ -2,9 +2,7 @@ package com.github.catvod.spider;
 
 import android.content.Context;
 
-import com.github.catvod.crawler.Spider;
-//import com.github.catvod.net.OkHttp;
-import com.github.catvod.utils.okhttp.OkHttpUtil;
+import com.github.catvod.spider.base.BaseSpider;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,19 +13,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Douban extends Spider {
+public class Douban extends BaseSpider {
 
     private final String siteUrl = "https://frodo.douban.com/api/v2";
     private final String apikey = "?apikey=0ac44ae016490db2204ce0a042db2916";
     private String extend;
-    private final String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36";
 
-    private String req(String url, Map<String, String> headerMap) {
-//        return OkHttp.string(url, headerMap);
-        return OkHttpUtil.string(url, headerMap);
-    }
-
-    private Map<String, String> getHeader() {
+    @Override
+    public Map<String, String> getHeader() {
         Map<String, String> header = new HashMap<>();
         header.put("Host", "frodo.douban.com");
         header.put("Connection", "Keep-Alive");
@@ -44,6 +37,7 @@ public class Douban extends Spider {
             String name = item.optString("title");
             String pic = getPic(item);
             String remark = getRating(item);
+
             JSONObject vod = new JSONObject();
             vod.put("vod_id", vodId);
             vod.put("vod_name", name);

@@ -1,8 +1,6 @@
 package com.github.catvod.spider;
 
-import com.github.catvod.crawler.Spider;
-//import com.github.catvod.net.OkHttp;
-import com.github.catvod.utils.okhttp.OkHttpUtil;
+import com.github.catvod.spider.base.BaseSpider;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,25 +15,15 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * @author zhixc
  * 星易影
  */
-public class XingYiYing extends Spider {
+public class XingYiYing extends BaseSpider {
 
     private final String siteUrl = "https://www.xingyiying.com";
-
-    private final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:102.0) Gecko/20100101 Firefox/102.0";
-
-    private Map<String, String> getHeader() {
-        Map<String, String> header = new HashMap<>();
-        header.put("User-Agent", userAgent);
-        header.put("Referer", siteUrl + "/");
-        return header;
-    }
 
     private Map<String, String> getHeaderForPlay() {
         Map<String, String> header = new HashMap<>();
@@ -44,13 +32,8 @@ public class XingYiYing extends Spider {
         return header;
     }
 
-    private String req(String url) {
-//        return OkHttp.string(url, getHeader());
-        return OkHttpUtil.string(url, getHeader());
-    }
-
     private JSONArray parseVodList(String url) throws Exception {
-        String html = req(url);
+        String html = req(url, getHeader());
         Elements elements = Jsoup.parse(html).select("[class=v_list] li");
         JSONArray videos = new JSONArray();
         for (Element e : elements) {
@@ -68,11 +51,6 @@ public class XingYiYing extends Spider {
             videos.put(vod);
         }
         return videos;
-    }
-
-    private String find(Pattern pattern, String html) {
-        Matcher m = pattern.matcher(html);
-        return m.find() ? m.group(1).trim() : "";
     }
 
     private String parseVodInfo(Element element) {
@@ -133,7 +111,7 @@ public class XingYiYing extends Spider {
         // https://www.xingyiying.com/index.php/vod/detail/id/183491.html
         // https://www.xingyiying.com/index.php/vod/detail/id/31606.html
         String detailUrl = siteUrl + "/index.php/vod/detail/id/" + vodId + ".html";
-        String html = req(detailUrl);
+        String html = req(detailUrl, getHeader());
         Document doc = Jsoup.parse(html);
         String name = doc.select("h1").text();
         String pic = doc.select(".module-info-poster img").attr("data-original");
@@ -207,7 +185,7 @@ public class XingYiYing extends Spider {
 //        if (!pg.equals("1")) searchUrl = siteUrl + "/s-" + keyword + "---------" + pg + ".html";
         if (!pg.equals("1")) return "";
         JSONArray videos = new JSONArray();
-        JSONObject searchResult = new JSONObject(req(searchUrl));
+        JSONObject searchResult = new JSONObject(req(searchUrl, getHeader()));
         JSONArray items = searchResult.optJSONArray("list");
         for (int i = 0; i < items.length(); i++) {
             JSONObject item = items.getJSONObject(i);
@@ -233,7 +211,7 @@ public class XingYiYing extends Spider {
         String lastUrl = id;
         int parse = 1;
         String headerStr = getHeader().toString();
-        String html = req(lastUrl);
+        String html = req(lastUrl, getHeader());
         String player_aaaa = find(Pattern.compile("player_aaaa=(.*?)</script>"), html);
         JSONObject jsonObject = new JSONObject(player_aaaa);
         String url = jsonObject.optString("url");

@@ -2,9 +2,7 @@ package com.github.catvod.spider;
 
 import android.text.TextUtils;
 
-import com.github.catvod.crawler.Spider;
-//import com.github.catvod.net.OkHttp;
-import com.github.catvod.utils.okhttp.OkHttpUtil;
+import com.github.catvod.spider.base.BaseSpider;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,28 +19,15 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * @author zhixc
  * 农民影视
  */
-public class NongMing extends Spider {
+public class NongMing extends BaseSpider {
 
     private final String siteUrl = "https://m.xiangdao.me";
-    private final String userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Mobile/15E148 Safari/604.1";
-
-    private String req(String url, Map<String, String> header) {
-//        return OkHttp.string(url, header);
-        return OkHttpUtil.string(url, header);
-    }
-
-    private Map<String, String> getHeader() {
-        Map<String, String> header = new HashMap<>();
-        header.put("User-Agent", userAgent);
-        return header;
-    }
 
     private String getRemark(String html) {
         return find(Pattern.compile("状态:&nbsp;(.*?)</div"), html)
@@ -61,11 +46,6 @@ public class NongMing extends Spider {
                 .replaceAll("</?[^>]+>", "")
                 .replaceAll("&nbsp;&nbsp;", "")
                 .replaceAll("&nbsp;", ",");
-    }
-
-    private String find(Pattern pattern, String html) {
-        Matcher matcher = pattern.matcher(html);
-        return matcher.find() ? matcher.group(1) : "";
     }
 
     private String getYear(String html) {

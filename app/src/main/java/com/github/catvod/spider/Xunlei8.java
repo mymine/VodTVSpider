@@ -1,12 +1,7 @@
 package com.github.catvod.spider;
 
-import com.github.catvod.crawler.Spider;
-//import com.github.catvod.net.OkHttp;
-import com.github.catvod.utils.okhttp.OkHttpUtil;
+import com.github.catvod.spider.base.BaseSpider;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -21,53 +16,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author zhixc
  * 迅雷电影天堂、迅雷吧
  */
-public class Xunlei8 extends Spider {
+public class Xunlei8 extends BaseSpider {
     private final String siteUrl = "https://xunlei8.top";
-
-    private final String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
-
-    private Map<String, String> getHeader() {
-        Map<String, String> header = new HashMap<>();
-        header.put("User-Agent", userAgent);
-        header.put("Referer", siteUrl + "/");
-        return header;
-    }
-
-    private String req(String url, Map<String, String> header) throws Exception {
-        Request.Builder builder = new Request.Builder().get().url(url);
-        for (String key : header.keySet()) builder.addHeader(key, header.get(key));
-        Request request = builder.build();
-        return req(request);
-    }
-
-    private String req(Request request) throws Exception {
-        Response response = okClient().newCall(request).execute();
-        return req(response);
-    }
-
-    private String req(Response response) throws Exception {
-        if (!response.isSuccessful()) return "";
-        byte[] bytes = response.body().bytes();
-        response.close();
-        return new String(bytes, "UTF-8");
-    }
-
-    private OkHttpClient okClient() {
-        //return OkHttp.client();
-        return OkHttpUtil.defaultClient();
-    }
-
-    private String find(Pattern pattern, String html) {
-        Matcher m = pattern.matcher(html);
-        return m.find() ? m.group(1).trim() : "";
-    }
 
     private JSONArray parseVodListFromDoc(String html) throws Exception {
         JSONArray videos = new JSONArray();
@@ -96,10 +51,6 @@ public class Xunlei8 extends Spider {
         return sb.toString();
     }
 
-    private String removeHtmlTag(String str) {
-        return str.replaceAll("</?[^>]+>", "");
-    }
-
     @Override
     public String homeContent(boolean filter) throws Exception {
         JSONArray classes = new JSONArray();
@@ -123,7 +74,7 @@ public class Xunlei8 extends Spider {
 
     @Override
     public String homeVideoContent() throws Exception {
-        String html = req(siteUrl, getHeader());
+        String html = req(siteUrl, getHeader(siteUrl + "/"));
         JSONArray videos = parseVodListFromDoc(html);
         JSONObject result = new JSONObject();
         result.put("list", videos);
@@ -138,7 +89,7 @@ public class Xunlei8 extends Spider {
         String area = extend.get("area") == null ? "0" : extend.get("area");
         String sort = extend.get("sort") == null ? "date" : extend.get("sort");
         String cateUrl = siteUrl + "/" + tid + "-" + cateId + "-" + year + "-" + area + "-" + sort + "-" + pg + "-30.html";
-        String html = req(cateUrl, getHeader());
+        String html = req(cateUrl, getHeader(siteUrl + "/"));
         JSONArray videos = parseVodListFromDoc(html);
         int page = Integer.parseInt(pg), count = 999, limit = videos.length(), total = Integer.MAX_VALUE;
         JSONObject result = new JSONObject();
@@ -153,7 +104,7 @@ public class Xunlei8 extends Spider {
     @Override
     public String detailContent(List<String> ids) throws Exception {
         String link = siteUrl + ids.get(0);
-        String html = req(link, getHeader());
+        String html = req(link, getHeader(siteUrl + "/"));
 
         String pic = "";
         String typeName = "";
@@ -229,7 +180,7 @@ public class Xunlei8 extends Spider {
     public String searchContent(String key, boolean quick, String pg) throws Exception {
         if (!"1".equals(pg)) return "";
         String searchUrl = siteUrl + "/s/" + URLEncoder.encode(key) + ".html";
-        String html = req(searchUrl, getHeader());
+        String html = req(searchUrl, getHeader(siteUrl + "/"));
         JSONArray videos = new JSONArray();
         Document doc = Jsoup.parse(html);
         for (Element it : doc.select(".b007")) {

@@ -3,9 +3,7 @@ package com.github.catvod.spider;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.github.catvod.crawler.Spider;
-//import com.github.catvod.net.OkHttp;
-import com.github.catvod.utils.okhttp.OkHttpUtil;
+import com.github.catvod.utils.m3u8.AdFilter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,68 +13,24 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.net.URLEncoder;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * @author zhixc
  * Vodflix
  */
-public class Voflix extends Spider {
+public class Voflix extends AdFilter {
 
     private String siteUrl;
-    private final String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36";
-
-    private String req(String url, Map<String, String> header) {
-//        return OkHttp.string(url, header);
-        return OkHttpUtil.string(url, header);
-    }
-
-    private Map<String, String> getHeader() {
-        Map<String, String> header = new HashMap<>();
-        header.put("User-Agent", userAgent);
-        header.put("Referer", siteUrl + "/");
-        return header;
-    }
-
-    /**
-     * 正则获取字符串
-     *
-     * @param regex 正则表达式字符串
-     * @param html  网页源码
-     * @return 返回正则获取的字符串结果
-     */
-    private String find(String regex, String html) {
-        Pattern p = Pattern.compile(regex, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(html);
-        return m.find() ? m.group(1) : "";
-    }
-
-    /**
-     * 正则获取字符串
-     *
-     * @param pattern 正则表达式 pattern 对象
-     * @param html    网页源码
-     * @return 返回正则获取的字符串结果
-     */
-    private String find(Pattern pattern, String html) {
-        Matcher m = pattern.matcher(html);
-        return m.find() ? m.group(1) : "";
-    }
 
     private String clean(String str) {
         return removeHtmlTag(str).replace("\n", "").replace("\t", "").trim();
-    }
-
-    private String removeHtmlTag(String str) {
-        return str.replaceAll("</?[^>]+>", "");
     }
 
     private JSONArray parseVodList(Elements items) throws Exception {
@@ -105,10 +59,13 @@ public class Voflix extends Spider {
      */
     @Override
     public void init(Context context, String extend) throws Exception {
-        super.init(context, extend);
         // 域名经常性发生变化，通过外部配置文件传入，可以方便修改
-        if (extend.endsWith("/")) extend = extend.substring(0, extend.lastIndexOf("/"));
-        siteUrl = extend;
+        // "siteUrl=https://www.voflix.vip$$$rulesUrl=https://fastly.jsdelivr.net/gh/zhixc/CatVodTVSpider@main/other/json/rules.json"
+        String[] split = extend.split("\\$\\$\\$");
+        String url = split[0].split("=")[1];
+        if (url.endsWith("/")) siteUrl = url.substring(0, url.lastIndexOf("/"));
+        else siteUrl = url;
+        super.init(context, split[1].split("=")[1]);
     }
 
     /**
@@ -145,7 +102,7 @@ public class Voflix extends Spider {
     @Override
     public String homeVideoContent() throws Exception {
         String hotUrl = siteUrl + "/label/new.html";
-        String html = req(hotUrl, getHeader());
+        String html = req(hotUrl, getHeader(siteUrl + "/"));
         Elements items = Jsoup.parse(html).select(".module-items").get(0).select(".module-item");
         JSONArray videos = parseVodList(items);
         JSONObject result = new JSONObject();
@@ -170,7 +127,7 @@ public class Voflix extends Spider {
         String by = extend.get("by") == null ? "" : extend.get("by");
         String classType = extend.get("class") == null ? "" : extend.get("class");
         String cateUrl = siteUrl + String.format("/show/%s-%s-%s-%s-----%s---%s.html", cateId, area, by, classType, pg, year);
-        String html = req(cateUrl, getHeader());
+        String html = req(cateUrl, getHeader(siteUrl + "/"));
         Elements items = Jsoup.parse(html).select(".module-items .module-item");
         JSONArray videos = parseVodList(items);
         int page = Integer.parseInt(pg), count = Integer.MAX_VALUE, limit = 40, total = Integer.MAX_VALUE;
@@ -193,7 +150,7 @@ public class Voflix extends Spider {
     public String detailContent(List<String> ids) throws Exception {
         String vodId = ids.get(0);
         String detailUrl = siteUrl + vodId;
-        String html = req(detailUrl, getHeader());
+        String html = req(detailUrl, getHeader(siteUrl + "/"));
         Document doc = Jsoup.parse(html);
         String name = doc.select(".module-info-heading > h1").text();
         String pic = doc.select("[class=ls-is-cached lazy lazyload]").attr("data-original");
@@ -257,7 +214,7 @@ public class Voflix extends Spider {
     @Override
     public String searchContent(String key, boolean quick) throws Exception {
         String searchUrl = siteUrl + "/index.php/ajax/suggest?mid=1&wd=" + URLEncoder.encode(key) + "&limit=20";
-        String html = req(searchUrl, getHeader());
+        String html = req(searchUrl, getHeader(siteUrl + "/"));
         JSONArray jsonArray = new JSONObject(html).getJSONArray("list");
         JSONArray videos = new JSONArray();
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -281,7 +238,7 @@ public class Voflix extends Spider {
     @Override
     public String playerContent(String flag, String id, List<String> vipFlags) throws Exception {
         String playPageUrl = siteUrl + id;
-        String html = req(playPageUrl, getHeader());
+        String html = req(playPageUrl, getHeader(siteUrl + "/"));
         String playerConfigStr = find(Pattern.compile("player_aaaa=(.*?)</script>"), html);
         String realPlayUrl = new JSONObject(playerConfigStr).optString("url");
         if (realPlayUrl.contains(".m3u8") || realPlayUrl.contains(".mp4")) {
@@ -289,7 +246,7 @@ public class Voflix extends Spider {
             result.put("parse", 0);
             result.put("header", getHeader().toString());
             result.put("playUrl", "");
-            result.put("url", realPlayUrl);
+            result.put("url", proxyM3U8(realPlayUrl));
             return result.toString();
         }
         return "";
