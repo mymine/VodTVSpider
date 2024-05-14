@@ -1,5 +1,8 @@
 package com.github.catvod.bean;
 
+import android.text.TextUtils;
+
+import java.util.Collections;
 import java.util.List;
 
 public class Rule {
@@ -19,7 +22,7 @@ public class Rule {
     }
 
     public String getName() {
-        return name;
+        return TextUtils.isEmpty(name) ? "" : name;
     }
 
     public void setName(String name) {
@@ -27,7 +30,7 @@ public class Rule {
     }
 
     public List<String> getHosts() {
-        return hosts;
+        return hosts == null ? Collections.emptyList() : hosts;
     }
 
     public void setHosts(List<String> hosts) {
@@ -35,7 +38,7 @@ public class Rule {
     }
 
     public List<String> getRegex() {
-        return regex;
+        return regex == null ? Collections.emptyList() : regex;
     }
 
     public void setRegex(List<String> regex) {

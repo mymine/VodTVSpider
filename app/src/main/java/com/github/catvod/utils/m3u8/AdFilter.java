@@ -78,6 +78,8 @@ public class AdFilter extends BaseSpider {
 
     public String proxyM3U8(String url) {
         if (!url.contains(".m3u8")) return url;
+        /*boolean m3u8Ad = getRegex(Uri.parse(url)).size() > 0;
+        return m3u8Ad ? Proxy.localProxyUrl() + "?do=m3u8&url=" + url : url;*/
         return Proxy.localProxyUrl() + "?do=m3u8&url=" + url;
     }
 }
