@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 //import com.github.catvod.net.OkHttp;
+import com.github.catvod.utils.UA;
 import com.github.catvod.utils.okhttp.OkHttpUtil;
 import com.google.common.net.HttpHeaders;
 

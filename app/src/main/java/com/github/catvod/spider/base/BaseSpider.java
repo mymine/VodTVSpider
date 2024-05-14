@@ -2,7 +2,7 @@ package com.github.catvod.spider.base;
 
 import com.github.catvod.crawler.Spider;
 //import com.github.catvod.net.OkHttp;
-import com.github.catvod.utils.m3u8.UA;
+import com.github.catvod.utils.UA;
 import com.github.catvod.utils.okhttp.OkHttpUtil;
 
 import java.util.HashMap;

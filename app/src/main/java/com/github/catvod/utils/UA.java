@@ -1,4 +1,4 @@
-package com.github.catvod.utils.m3u8;
+package com.github.catvod.utils;
 
 public class UA {
     private UA() {
