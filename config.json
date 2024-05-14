@@ -1,5 +1,5 @@
 {
-  "spider": "./jar/custom_spider.jar;md5;aded0173514dd4ff9e6291a25346b286",
+  "spider": "./jar/custom_spider.jar;md5;4d1b2ee6a8e1a0f256bc562a249a5704",
 
   "lives": [
     {
@@ -30,7 +30,9 @@
     {"key":"本地2","name":"📃本地文件[不显示隐藏文件]","type":3,"api":"csp_LocalFileV2","ext": "showAllFile=false","searchable":0,"playerType":1},
     {"key":"巴士","name":"🌸巴士[动漫]","type":3,"api": "csp_Dm84","searchable":1},
     {"key":"Anime1","name":"🌸Anime1[动漫]","type":3,"api":"csp_Anime1","searchable":1},
-    {"key":"Voflix","name":"📺Voflix[影视]","type":3,"api":"csp_Voflix","searchable":1,"ext":"https://www.voflix.vip/"},
+    {"key":"Voflix","name":"📺Voflix[影视]","type":3,"api":"csp_Voflix","searchable":1,
+      "ext": "siteUrl=https://www.voflix.vip$$$rulesUrl=https://fastly.jsdelivr.net/gh/zhixc/CatVodTVSpider@main/other/json/rules.json"
+    },
     {"key":"Live2Vod","name":"电视[直播]","type":3,"api":"csp_Live2Vod","searchable":0,"changeable":0,
      "ext":"南风$http://152.32.170.60/Yoursmile7/TVBox/raw/branch/master/live.txt#私立直播$https://ghproxy.net/https://raw.githubusercontent.com/ssili126/tv/main/itvlist.m3u&&&https://img1.dd.ci/file/08b8a048adf5d333c6030.png"
     },
