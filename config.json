@@ -44,13 +44,13 @@
     {"key":"MGTV","name":"📺MGTV[影视]","type":3,"api":"csp_MGTV","searchable":1},
     {"key":"农民","name":"📺农民[影视]","type":3,"api":"csp_NongMing","searchable":1},
 
-    {"key":"dr_py磁力熊","name":"🐮磁力熊[磁]","type":3,"api":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/drpy2.min.js","ext":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/磁力熊[磁].js","playerType":1,"timeout":120},
-    {"key":"dr_py荐片","name":"🐮荐片[磁]","type":3,"api":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/drpy2.min.js","ext":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/荐片.js","playerType":1,"timeout":30},
-    {"key":"dr_py我的哔哩","name":"🐮我的哔哩[合集]","type":3,"api":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/drpy2.min.js","ext":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/我的哔哩.js"},
-    {"key":"dr_py厂长","name":"🐮厂长[影视]","type":3,"api":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/drpy2.min.js","ext":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/厂长资源.js"},
-    {"key":"dr_py低端","name":"🐮低端[影视]","type":3,"api":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/drpy2.min.js","ext":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/ddys.js"},
-    {"key":"dr_py两个BT","name":"🐮两个BT[影视]","type":3,"api":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/drpy2.min.js","ext":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/两个BT.js"},
-    {"key":"dr_py怡萱动漫","name":"🐮怡萱[动漫]","type":3,"api":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/libs/drpy2.min.js","ext":"https://gh.jiasu.in/https://raw.githubusercontent.com/hjdhnx/dr_py/main/js/怡萱动漫.js"},
+    {"key":"dr_py磁力熊","name":"🐮磁力熊[磁]","type":3,"api":"https://gitee.com/jahom1009/dr_py/raw/main/libs/drpy2.min.js","ext":"https://gitee.com/jahom1009/dr_py/raw/main/js/磁力熊[磁].js","playerType":1,"timeout":120},
+    {"key":"dr_py荐片","name":"🐮荐片[磁]","type":3,"api":"https://gitee.com/jahom1009/dr_py/raw/main/libs/drpy2.min.js","ext":"https://gitee.com/jahom1009/dr_py/raw/main/js/荐片.js","playerType":1,"timeout":30},
+    {"key":"dr_py我的哔哩","name":"🐮我的哔哩[合集]","type":3,"api":"https://gitee.com/jahom1009/dr_py/raw/main/libs/drpy2.min.js","ext":"https://gitee.com/jahom1009/dr_py/raw/main/js/我的哔哩.js"},
+    {"key":"dr_py厂长","name":"🐮厂长[影视]","type":3,"api":"https://gitee.com/jahom1009/dr_py/raw/main/libs/drpy2.min.js","ext":"https://gitee.com/jahom1009/dr_py/raw/main/js/厂长资源.js"},
+    {"key":"dr_py低端","name":"🐮低端[影视]","type":3,"api":"https://gitee.com/jahom1009/dr_py/raw/main/libs/drpy2.min.js","ext":"https://gitee.com/jahom1009/dr_py/raw/main/js/ddys.js"},
+    {"key":"dr_py两个BT","name":"🐮两个BT[影视]","type":3,"api":"https://gitee.com/jahom1009/dr_py/raw/main/libs/drpy2.min.js","ext":"https://gitee.com/jahom1009/dr_py/raw/main/js/两个BT.js"},
+    {"key":"dr_py怡萱动漫","name":"🐮怡萱[动漫]","type":3,"api":"https://gitee.com/jahom1009/dr_py/raw/main/libs/drpy2.min.js","ext":"https://gitee.com/jahom1009/dr_py/raw/main/js/怡萱动漫.js"},
 
     {"key":"push_agent","name":"⏫推送(播放页链接或磁力)","type":3,"api":"csp_PushAgent","searchable":0,"playerType":1, "timeout":60}
   ],
