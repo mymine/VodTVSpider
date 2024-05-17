@@ -143,7 +143,7 @@ public class SixV extends BaseSpider {
 
     @Override
     public String homeVideoContent() throws Exception {
-        String html = req(siteUrl, getHeader());
+        String html = string(siteUrl, getHeader());
         JSONArray videos = parseVodListFromDoc(html);
         JSONObject result = new JSONObject();
         result.put("list", videos);
@@ -154,7 +154,7 @@ public class SixV extends BaseSpider {
     public String categoryContent(String tid, String pg, boolean filter, HashMap<String, String> extend) throws Exception {
         String cateUrl = siteUrl + "/" + tid;
         if (!pg.equals("1")) cateUrl += "/index_" + pg + ".html";
-        String html = req(cateUrl, getHeader());
+        String html = string(cateUrl, getHeader());
         JSONArray videos = parseVodListFromDoc(html);
         int page = Integer.parseInt(pg), count = 999, limit = videos.length(), total = Integer.MAX_VALUE;
         JSONObject result = new JSONObject();
@@ -170,7 +170,7 @@ public class SixV extends BaseSpider {
     public String detailContent(List<String> ids) throws Exception {
         String vodId = ids.get(0);
         String detailUrl = siteUrl + vodId;
-        String html = req(detailUrl, getHeader());
+        String html = string(detailUrl, getHeader());
         Document doc = Jsoup.parse(html);
         Elements sourceList = doc.select("#post_content");
         Map<String, String> playMap = isMovie(vodId) ? parsePlayMapForMovieFromDoc(sourceList) : parsePlayMapFromDoc(sourceList);
@@ -233,7 +233,7 @@ public class SixV extends BaseSpider {
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .post(requestBody)
                     .build();
-            Response response = req(request);
+            Response response = newCall(request);
             if (!response.isSuccessful()) return "";
             String[] split = String.valueOf(response.request().url()).split("\\?searchid=");
             nextSearchUrlPrefix = split[0] + "index.php?page=";
@@ -242,7 +242,7 @@ public class SixV extends BaseSpider {
         } else {
             int page = Integer.parseInt(pg) - 1;
             searchUrl = nextSearchUrlPrefix + page + nextSearchUrlSuffix;
-            html = req(searchUrl, getHeader());
+            html = string(searchUrl, getHeader());
         }
         JSONArray videos = parseVodListFromDoc(html);
         JSONObject result = new JSONObject();

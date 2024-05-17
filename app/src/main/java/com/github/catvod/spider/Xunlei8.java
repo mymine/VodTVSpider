@@ -74,7 +74,7 @@ public class Xunlei8 extends BaseSpider {
 
     @Override
     public String homeVideoContent() throws Exception {
-        String html = req(siteUrl, getHeader(siteUrl + "/"));
+        String html = string(siteUrl, getHeader(siteUrl + "/"));
         JSONArray videos = parseVodListFromDoc(html);
         JSONObject result = new JSONObject();
         result.put("list", videos);
@@ -89,7 +89,7 @@ public class Xunlei8 extends BaseSpider {
         String area = extend.get("area") == null ? "0" : extend.get("area");
         String sort = extend.get("sort") == null ? "date" : extend.get("sort");
         String cateUrl = siteUrl + "/" + tid + "-" + cateId + "-" + year + "-" + area + "-" + sort + "-" + pg + "-30.html";
-        String html = req(cateUrl, getHeader(siteUrl + "/"));
+        String html = string(cateUrl, getHeader(siteUrl + "/"));
         JSONArray videos = parseVodListFromDoc(html);
         int page = Integer.parseInt(pg), count = 999, limit = videos.length(), total = Integer.MAX_VALUE;
         JSONObject result = new JSONObject();
@@ -104,7 +104,7 @@ public class Xunlei8 extends BaseSpider {
     @Override
     public String detailContent(List<String> ids) throws Exception {
         String link = siteUrl + ids.get(0);
-        String html = req(link, getHeader(siteUrl + "/"));
+        String html = string(link, getHeader(siteUrl + "/"));
 
         String pic = "";
         String typeName = "";
@@ -180,7 +180,7 @@ public class Xunlei8 extends BaseSpider {
     public String searchContent(String key, boolean quick, String pg) throws Exception {
         if (!"1".equals(pg)) return "";
         String searchUrl = siteUrl + "/s/" + URLEncoder.encode(key) + ".html";
-        String html = req(searchUrl, getHeader(siteUrl + "/"));
+        String html = string(searchUrl, getHeader(siteUrl + "/"));
         JSONArray videos = new JSONArray();
         Document doc = Jsoup.parse(html);
         for (Element it : doc.select(".b007")) {

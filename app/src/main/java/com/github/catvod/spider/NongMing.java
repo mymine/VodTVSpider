@@ -79,7 +79,7 @@ public class NongMing extends BaseSpider {
         String classType = extend.get("class") == null ? tid : extend.get("class");
 
         String cateUrl = siteUrl + String.format("/vod-list-id-%s-pg-%s-order--by-%s-class-0-year-%s-letter--area-%s-lang-.html", classType, pg, by, year, area);
-        String html = req(cateUrl, getHeader());
+        String html = string(cateUrl, getHeader());
         JSONArray videos = new JSONArray();
         Elements items = Jsoup.parse(html).select("[class=globalPicList] li > a");
         for (Element item : items) {
@@ -109,7 +109,7 @@ public class NongMing extends BaseSpider {
     public String detailContent(List<String> ids) throws Exception {
         String vodId = ids.get(0);
         String detailUrl = siteUrl + vodId;
-        String html = req(detailUrl, getHeader());
+        String html = string(detailUrl, getHeader());
         Document doc = Jsoup.parse(html);
         String name = doc.select(".page-hd a").attr("title");
         String pic = doc.select(".page-hd img").attr("src");
@@ -158,7 +158,7 @@ public class NongMing extends BaseSpider {
     @Override
     public String searchContent(String key, boolean quick) throws Exception {
         String searchUrl = siteUrl + "/index.php?m=vod-search&wd=" + URLEncoder.encode(key);
-        String html = req(searchUrl, getHeader());
+        String html = string(searchUrl, getHeader());
         JSONArray videos = new JSONArray();
         Elements items = Jsoup.parse(html).select("[id=data_list] li");
         for (Element item : items) {

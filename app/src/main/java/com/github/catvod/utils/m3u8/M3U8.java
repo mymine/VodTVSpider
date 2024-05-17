@@ -3,9 +3,7 @@ package com.github.catvod.utils.m3u8;
 import android.net.Uri;
 import android.text.TextUtils;
 
-//import com.github.catvod.net.OkHttp;
-import com.github.catvod.utils.UA;
-import com.github.catvod.utils.okhttp.OkHttpUtil;
+import com.github.catvod.spider.base.BaseSpider;
 import com.google.common.net.HttpHeaders;
 
 import java.io.ByteArrayInputStream;
@@ -17,7 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import okhttp3.Headers;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -39,14 +36,9 @@ public class M3U8 {
         return regex.contains(TAG_DISCONTINUITY) || regex.contains(TAG_MEDIA_DURATION) || regex.contains(TAG_ENDLIST) || regex.contains(TAG_KEY) || isDouble(regex);
     }
 
-    private static OkHttpClient okClient(){
-        //return OkHttp.client();
-        return OkHttpUtil.defaultClient();
-    }
-
     public static Object[] proxy(Map<String, String> params) throws Exception {
         Map<String, String> header = new HashMap<>();
-        header.put("User-Agent", UA.CHROME);
+        header.put("User-Agent", BaseSpider.CHROME);
         String m3u8Content = get(params.get("url"), header);
         Object[] result = new Object[3];
         result[0] = 200;
@@ -59,7 +51,7 @@ public class M3U8 {
     public static String get(String url, Map<String, String> headers) {
         try {
             if (TextUtils.isEmpty(url)) return "";
-            Response response = okClient().newCall(new Request.Builder().url(url).headers(getHeader(headers)).build()).execute();
+            Response response = BaseSpider.getOkHttpClient().newCall(new Request.Builder().url(url).headers(getHeader(headers)).build()).execute();
             String result = response.body().string();
             result = result.replaceAll("\r\n", "\n");
             Matcher matcher = Pattern.compile("#EXT-X-STREAM-INF(.*)\\n?(.*)").matcher(result);

@@ -58,7 +58,7 @@ public class Douban extends BaseSpider {
 
     private String getPic(JSONObject item) {
         try {
-            return item.getJSONObject("pic").optString("normal") + "@Referer=https://api.douban.com/@User-Agent=" + userAgent;
+            return item.getJSONObject("pic").optString("normal") + "@Referer=https://api.douban.com/@User-Agent=" + CHROME;
         } catch (Exception e) {
             return "";
         }
@@ -103,10 +103,10 @@ public class Douban extends BaseSpider {
             classes.put(c);
         }
         String recommendUrl = "http://api.douban.com/api/v2/subject_collection/subject_real_time_hotest/items" + apikey;
-        JSONObject jsonObject = new JSONObject(req(recommendUrl, getHeader()));
+        JSONObject jsonObject = new JSONObject(string(recommendUrl, getHeader()));
         JSONArray items = jsonObject.optJSONArray("subject_collection_items");
         JSONArray videos = parseVodListFromJSONArray(items);
-        String f = req(extend, null);
+        String f = string(extend, null);
         JSONObject filterConfig = new JSONObject(f);
         JSONObject result = new JSONObject();
         result.put("class", classes);
@@ -156,7 +156,7 @@ public class Douban extends BaseSpider {
                 cateUrl = siteUrl + "/movie/recommend" + apikey + "&sort=" + sort + "&tags=" + tags + "&start=" + start + "&count=20";
                 break;
         }
-        JSONObject object = new JSONObject(req(cateUrl, getHeader()));
+        JSONObject object = new JSONObject(string(cateUrl, getHeader()));
         JSONArray array = object.getJSONArray(itemKey);
         JSONArray videos = parseVodListFromJSONArray(array);
         int page = Integer.parseInt(pg), count = Integer.MAX_VALUE, limit = 20, total = Integer.MAX_VALUE;

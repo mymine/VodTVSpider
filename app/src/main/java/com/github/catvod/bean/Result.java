@@ -1,7 +1,7 @@
 package com.github.catvod.bean;
 
 
-import com.github.catvod.utils.UA;
+import com.github.catvod.spider.base.BaseSpider;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -141,7 +141,7 @@ public class Result {
 
     public Result chrome() {
         Map<String, String> header = new HashMap<>();
-        header.put("User-Agent", UA.CHROME);
+        header.put("User-Agent", BaseSpider.CHROME);
         header(header);
         return this;
     }

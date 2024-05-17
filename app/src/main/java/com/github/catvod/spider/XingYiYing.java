@@ -28,12 +28,12 @@ public class XingYiYing extends BaseSpider {
     private Map<String, String> getHeaderForPlay() {
         Map<String, String> header = new HashMap<>();
         header.put("Accept", "*/*");
-        header.put("User-Agent", userAgent);
+        header.put("User-Agent", CHROME);
         return header;
     }
 
     private JSONArray parseVodList(String url) throws Exception {
-        String html = req(url, getHeader());
+        String html = string(url, getHeader());
         Elements elements = Jsoup.parse(html).select("[class=v_list] li");
         JSONArray videos = new JSONArray();
         for (Element e : elements) {
@@ -111,7 +111,7 @@ public class XingYiYing extends BaseSpider {
         // https://www.xingyiying.com/index.php/vod/detail/id/183491.html
         // https://www.xingyiying.com/index.php/vod/detail/id/31606.html
         String detailUrl = siteUrl + "/index.php/vod/detail/id/" + vodId + ".html";
-        String html = req(detailUrl, getHeader());
+        String html = string(detailUrl, getHeader());
         Document doc = Jsoup.parse(html);
         String name = doc.select("h1").text();
         String pic = doc.select(".module-info-poster img").attr("data-original");
@@ -185,7 +185,7 @@ public class XingYiYing extends BaseSpider {
 //        if (!pg.equals("1")) searchUrl = siteUrl + "/s-" + keyword + "---------" + pg + ".html";
         if (!pg.equals("1")) return "";
         JSONArray videos = new JSONArray();
-        JSONObject searchResult = new JSONObject(req(searchUrl, getHeader()));
+        JSONObject searchResult = new JSONObject(string(searchUrl, getHeader()));
         JSONArray items = searchResult.optJSONArray("list");
         for (int i = 0; i < items.length(); i++) {
             JSONObject item = items.getJSONObject(i);
@@ -211,7 +211,7 @@ public class XingYiYing extends BaseSpider {
         String lastUrl = id;
         int parse = 1;
         String headerStr = getHeader().toString();
-        String html = req(lastUrl, getHeader());
+        String html = string(lastUrl, getHeader());
         String player_aaaa = find(Pattern.compile("player_aaaa=(.*?)</script>"), html);
         JSONObject jsonObject = new JSONObject(player_aaaa);
         String url = jsonObject.optString("url");

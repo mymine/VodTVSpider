@@ -25,7 +25,7 @@ public class AdFilter extends BaseSpider {
     @Override
     public void init(Context context, String extend) throws Exception {
         super.init(context, extend);
-        String content = req(extend, getHeader());
+        String content = string(extend, getHeader());
         setRules(content);
     }
 

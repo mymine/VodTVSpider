@@ -136,7 +136,7 @@ public class DyGang extends BaseSpider {
 
     @Override
     public String homeVideoContent() throws Exception {
-        String html = req(siteUrl, getHeader(), "GBK");
+        String html = string(siteUrl, getHeader(), "GBK");
         JSONArray videos = parseVodListFromDoc(html, true);
         JSONObject result = new JSONObject();
         result.put("list", videos);
@@ -149,7 +149,7 @@ public class DyGang extends BaseSpider {
         if ("my_dianshiju".equals(tid)) tid = extend.get("cateId") == null ? "dsj" : extend.get("cateId");
         String cateUrl = siteUrl + "/" + tid;
         if (!"1".equals(pg)) cateUrl += "/index_" + pg + ".htm";
-        String html = req(cateUrl, getHeader(), "GBK");
+        String html = string(cateUrl, getHeader(), "GBK");
         JSONArray videos = parseVodListFromDoc(html, false);
         int page = Integer.parseInt(pg), count = 999, limit = videos.length(), total = Integer.MAX_VALUE;
         JSONObject result = new JSONObject();
@@ -165,7 +165,7 @@ public class DyGang extends BaseSpider {
     public String detailContent(List<String> ids) throws Exception {
         String vodId = ids.get(0);
         String link = siteUrl + vodId;
-        String html = req(link, getHeader(), "GBK");
+        String html = string(link, getHeader(), "GBK");
         String remark = "上映日期：" + removeHtmlTag(find(Pattern.compile("◎上映日期　(.*?)<br"), html));
         //String remark = find(Pattern.compile("◎片　　长　(.*?)<br"), html);
         //String remark = find(Pattern.compile("◎语　　言　(.*?)<br"), html);
@@ -231,16 +231,16 @@ public class DyGang extends BaseSpider {
                     .header("Upgrade-Insecure-Requests", "1")
                     .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36")
                     .build();
-            Response response = okClient().newCall(request).execute();
+            Response response = getOkHttpClient().newCall(request).execute();
             if (!response.isSuccessful()) return "";
             String[] split = String.valueOf(response.request().url()).split("\\?searchid=");
             nextSearchUrlPrefix = split[0] + "index.php?page=";
             nextSearchUrlSuffix = "&searchid=" + split[1];
-            html = req(response, "GBK");
+            html = string(response, "GBK");
         } else {
             int page = Integer.parseInt(pg) - 1;
             searchUrl = nextSearchUrlPrefix + page + nextSearchUrlSuffix;
-            html = req(searchUrl, getHeader(), "GBK");
+            html = string(searchUrl, getHeader(), "GBK");
         }
         JSONArray videos = parseVodListFromDoc(html, false);
         JSONObject result = new JSONObject();

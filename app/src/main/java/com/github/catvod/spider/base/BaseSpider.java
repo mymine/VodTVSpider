@@ -2,9 +2,9 @@ package com.github.catvod.spider.base;
 
 import com.github.catvod.crawler.Spider;
 //import com.github.catvod.net.OkHttp;
-import com.github.catvod.utils.UA;
 import com.github.catvod.utils.okhttp.OkHttpUtil;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -21,54 +21,62 @@ import okhttp3.Response;
  * 编写爬虫要重写的模版方法只需看 Spider 类里面的方法
  */
 public class BaseSpider extends Spider {
-    protected final String userAgent = UA.FIREFOX;
+    public static final String CHROME = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36";
+    public static final String FIREFOX = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0";
+    public static final String IPHONE_SE = "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1";
 
-    protected Map<String, String> getHeader() {
+    public Map<String, String> getHeader() {
         Map<String, String> header = new HashMap<>();
-        header.put("User-Agent", userAgent);
+        header.put("User-Agent", CHROME);
         return header;
     }
 
-    protected Map<String, String> getHeader(String referer) {
+    public Map<String, String> getHeader(String referer) {
         Map<String, String> header = new HashMap<>();
-        header.put("User-Agent", userAgent);
+        header.put("User-Agent", CHROME);
         header.put("Referer", referer);
         return header;
     }
 
-    protected OkHttpClient okClient() {
+    public static OkHttpClient getOkHttpClient() {
         //return OkHttp.client();
         return OkHttpUtil.defaultClient();
     }
 
-    /*protected String req(String url) throws Exception {
-        return req(url, getHeader());
-    }*/
-
-    protected String req(String url, Map<String, String> header) throws Exception {
-        //return OkHttp.string(url, header);
-        return OkHttpUtil.string(url, header);
+    public static Response newCall(Request request) throws IOException {
+        return getOkHttpClient().newCall(request).execute();
     }
 
-    protected String req(String url, Map<String, String> header, String encoding) throws Exception {
-        Request request = new Request.Builder().get().url(url).headers(Headers.of(header)).build();
-        return req(request, encoding);
+    public static Response newCall(String url) throws IOException {
+        return getOkHttpClient().newCall(new Request.Builder().url(url).build()).execute();
     }
 
-    protected Response req(Request request) throws Exception {
-        return okClient().newCall(request).execute();
+    public static Response newCall(String url, Map<String, String> header) throws IOException {
+        return getOkHttpClient().newCall(new Request.Builder().url(url).headers(Headers.of(header)).build()).execute();
     }
 
-    protected String req(Request request, String encoding) throws Exception {
-        Response response = okClient().newCall(request).execute();
-        return req(response, encoding);
+    public String string(String url) throws Exception {
+        return string(newCall(url), null);
     }
 
-    protected String req(Response response, String encoding) throws Exception {
-        if (!response.isSuccessful()) return "";
-        byte[] bytes = response.body().bytes();
-        response.close();
-        return new String(bytes, encoding);
+    public String string(String url, Map<String, String> header) throws Exception {
+        return string(newCall(url, header), null);
+    }
+
+    public String string(String url, Map<String, String> header, String encoding) throws Exception {
+        return string(newCall(url, header), encoding);
+    }
+
+    public String string(Response response, String encoding) throws Exception {
+        String result = "";
+        try {
+            byte[] bytes = response.body().bytes();
+            result = new String(bytes, encoding == null ? "UTF-8" : encoding);
+        } catch (Exception ignored) {
+        } finally {
+            response.close();
+        }
+        return result;
     }
 
     /**
@@ -78,7 +86,7 @@ public class BaseSpider extends Spider {
      * @param html    网页源码
      * @return 返回正则获取的字符串结果
      */
-    protected String find(Pattern pattern, String html) {
+    public String find(Pattern pattern, String html) {
         Matcher m = pattern.matcher(html);
         return m.find() ? m.group(1).trim() : "";
     }
@@ -90,13 +98,13 @@ public class BaseSpider extends Spider {
      * @param html  网页源码
      * @return 返回正则获取的字符串结果
      */
-    protected String find(String regex, String html) {
+    public String find(String regex, String html) {
         Pattern pattern = Pattern.compile(regex, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
         Matcher m = pattern.matcher(html);
         return m.find() ? m.group(1).trim() : "";
     }
 
-    protected String removeHtmlTag(String input) {
+    public String removeHtmlTag(String input) {
         return input.replaceAll("</?[^>]+>", "");
     }
 

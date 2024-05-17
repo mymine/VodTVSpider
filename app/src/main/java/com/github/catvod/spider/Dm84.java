@@ -29,7 +29,7 @@ public class Dm84 extends BaseSpider {
     private final String siteUrl = "https://dm84.tv";
 
     private JSONArray parseVodList(String url) throws Exception {
-        String html = req(url, getHeader(siteUrl + "/"));
+        String html = string(url, getHeader(siteUrl + "/"));
         Elements elements = Jsoup.parse(html).select("[class=v_list] li");
         JSONArray videos = new JSONArray();
         for (Element e : elements) {
@@ -98,7 +98,7 @@ public class Dm84 extends BaseSpider {
     public String detailContent(List<String> ids) throws Exception {
         String vodId = ids.get(0);
         String detailUrl = siteUrl + vodId;
-        String html = req(detailUrl, getHeader(siteUrl + "/"));
+        String html = string(detailUrl, getHeader(siteUrl + "/"));
         Document doc = Jsoup.parse(html);
         String name = doc.select(".v_title > a").text();
         String pic = doc.select("#v_content > .cover > img").attr("src");
@@ -171,7 +171,7 @@ public class Dm84 extends BaseSpider {
     @Override
     public String playerContent(String flag, String id, List<String> vipFlags) throws Exception {
         String lastUrl = id;
-        String html = req(lastUrl, getHeader(siteUrl + "/"));
+        String html = string(lastUrl, getHeader(siteUrl + "/"));
         lastUrl = Jsoup.parse(html).select("iframe").attr("src");
 
         JSONObject result = new JSONObject();

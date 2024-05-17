@@ -102,7 +102,7 @@ public class Voflix extends AdFilter {
     @Override
     public String homeVideoContent() throws Exception {
         String hotUrl = siteUrl + "/label/new.html";
-        String html = req(hotUrl, getHeader(siteUrl + "/"));
+        String html = string(hotUrl, getHeader(siteUrl + "/"));
         Elements items = Jsoup.parse(html).select(".module-items").get(0).select(".module-item");
         JSONArray videos = parseVodList(items);
         JSONObject result = new JSONObject();
@@ -127,7 +127,7 @@ public class Voflix extends AdFilter {
         String by = extend.get("by") == null ? "" : extend.get("by");
         String classType = extend.get("class") == null ? "" : extend.get("class");
         String cateUrl = siteUrl + String.format("/show/%s-%s-%s-%s-----%s---%s.html", cateId, area, by, classType, pg, year);
-        String html = req(cateUrl, getHeader(siteUrl + "/"));
+        String html = string(cateUrl, getHeader(siteUrl + "/"));
         Elements items = Jsoup.parse(html).select(".module-items .module-item");
         JSONArray videos = parseVodList(items);
         int page = Integer.parseInt(pg), count = Integer.MAX_VALUE, limit = 40, total = Integer.MAX_VALUE;
@@ -150,7 +150,7 @@ public class Voflix extends AdFilter {
     public String detailContent(List<String> ids) throws Exception {
         String vodId = ids.get(0);
         String detailUrl = siteUrl + vodId;
-        String html = req(detailUrl, getHeader(siteUrl + "/"));
+        String html = string(detailUrl, getHeader(siteUrl + "/"));
         Document doc = Jsoup.parse(html);
         String name = doc.select(".module-info-heading > h1").text();
         String pic = doc.select("[class=ls-is-cached lazy lazyload]").attr("data-original");
@@ -215,7 +215,7 @@ public class Voflix extends AdFilter {
     @Override
     public String searchContent(String key, boolean quick) throws Exception {
         String searchUrl = siteUrl + "/index.php/ajax/suggest?mid=1&wd=" + URLEncoder.encode(key) + "&limit=20";
-        String html = req(searchUrl, getHeader(siteUrl + "/"));
+        String html = string(searchUrl, getHeader(siteUrl + "/"));
         JSONArray jsonArray = new JSONObject(html).getJSONArray("list");
         JSONArray videos = new JSONArray();
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -239,7 +239,7 @@ public class Voflix extends AdFilter {
     @Override
     public String playerContent(String flag, String id, List<String> vipFlags) throws Exception {
         String playPageUrl = siteUrl + id;
-        String html = req(playPageUrl, getHeader(siteUrl + "/"));
+        String html = string(playPageUrl, getHeader(siteUrl + "/"));
         String playerConfigStr = find(Pattern.compile("player_aaaa=(.*?)</script>"), html);
         String realPlayUrl = new JSONObject(playerConfigStr).optString("url");
         if (realPlayUrl.contains(".m3u8") || realPlayUrl.contains(".mp4")) {
